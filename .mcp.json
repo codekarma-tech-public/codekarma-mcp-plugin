@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "karma-iq": {
+      "type": "http",
+      "url": "https://app.codekarma.tech/mcp/sse"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "karma-iq",
+  "version": "1.0.0",
+  "description": "Connect to CodeKarma's karmaIQ MCP server for service-mesh graph analysis, impact analysis, dependency traversal, flow tracing, and real-time service health monitoring across your microservices architecture.",
+  "author": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "logo": "assets/logo.png",
+  "homepage": "https://codekarma.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codekarma-tech/codekarma-mcp-plugin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "service-mesh",
+    "observability",
+    "impact-analysis",
+    "microservices",
+    "mcp",
+    "service-graph",
+    "root-cause-analysis",
+    "flow-tracing"
+  ],
+  "category": "observability",
+  "mcpServers": ".mcp.json"
+}
