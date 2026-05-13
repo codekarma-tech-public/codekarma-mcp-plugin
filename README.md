@@ -1,77 +1,173 @@
-# karmaIQ Plugin
+<p align="center">
+  <img src="assets/logo.png" alt="karmaIQ" width="120" />
+</p>
 
-This repository contains the configuration needed to integrate [CodeKarma's](https://codekarma.ai) karmaIQ with Cursor IDE and Claude Code. The plugin enables your agents to interact directly with your service mesh, allowing you to analyze service graphs, trace request flows, investigate failures, and monitor service health—all through natural language.
+# karmaIQ — Production Intelligence for Claude Code
 
-## Features
+> Coding tools see your code. **karmaIQ shows what that code does in production.**
 
-The karmaIQ MCP server provides the following capabilities:
+karmaIQ brings real-time service-mesh truth — error rates, latency, dependencies, root cause — directly into your Claude Code session. It closes the gap between the file in front of you and the system actually running in prod.
 
-- **Service Graph Analysis**: Fetch and explore the full service mesh topology, traverse upstream and downstream dependencies, and find paths between services
-- **Impact Analysis**: Simulate node failures to determine blast radius, identify single points of failure, and detect circular dependencies
-- **Flow Tracing**: Trace end-to-end request paths through the mesh, find critical (highest-latency or highest-traffic) paths, and explore method call hierarchies
-- **Service Health**: Check error rates, latency, and throughput for any service, edge, or API endpoint with time-windowed queries
-- **Root Cause Investigation**: Identify upstream root cause candidates for failing services, correlate graph-level APIs with method-level flow data, and attribute errors across the dependency graph
-- **Code-Level Mapping**: Map HTTP endpoints to implementing code, analyze method execution flows, find dead code, and rank methods by CPU, latency, or error impact
+This repository is the **karmaIQ plugin marketplace**: a set of composable Claude Code plugins, each targeting a specific production-intelligence workflow.
 
-## Prerequisites
+### What makes it different
 
-Before setting up the karmaIQ MCP server, ensure you have:
+- **Live production signal**, not static analysis — QPM, error %, p99 latency, amplification per edge, real callers
+- **Autonomous SRE subagents** — incident, impact, architecture, and canary workflows run in isolated context, returning focused summaries instead of flooding your chat
+- **Path-scoped + event-driven** — pre-warms on API mentions, hints blast radius on `git commit`, surfaces canary verdicts before promotion
+- **Read-only by design** — every subagent restricted to karmaIQ MCP tools. No Bash, Edit, or shell access. Safe to install.
 
-- Cursor IDE or Claude Code CLI installed
-- A CodeKarma account with access to Karma Insights
+---
 
-## Installation
+## Install
 
-Choose the installation method for your IDE:
+Inside Claude Code:
 
-### Claude Code
-
-Run the following command in your terminal:
-
-```bash
-claude plugin add -- codekarma-tech/codekarma-mcp-plugin
+```
+/plugin marketplace add codekarma-tech/codekarma-mcp-plugin
+/plugins
 ```
 
-The karmaIQ MCP server will be automatically configured when the plugin loads. You will be prompted to authenticate into your CodeKarma account via OAuth.
+Then install the plugins you need (see persona matrix below).
 
-The Claude plugin uses the following MCP configuration (`.mcp.json`):
+---
+
+## Plugins
+
+| Plugin | For | What it does |
+|---|---|---|
+| `karmaiq-core` | Everyone (install first) | MCP connection, domain picker, mesh exploration skill |
+| `karmaiq-firefighter` | On-call SRE | Autonomous incident diagnosis. Pre-warms service lookups on user prompts |
+| `karmaiq-impact` | Devs pre-commit | Blast-radius check before changing methods. Hints from staged diff on commit |
+| `karmaiq-architect` | Architects | Cycles, SPOFs, dead code, hot methods, fan analysis |
+| `karmaiq-promotion-gate` | CI/CD | Canary regression verdict — STABLE / WATCH / REGRESSION / INSUFFICIENT_DATA |
+
+## Install by persona
+
+```
+# SRE / on-call
+/plugin install karmaiq-core@karmaiq
+/plugin install karmaiq-firefighter@karmaiq
+
+# Dev (pre-commit safety)
+/plugin install karmaiq-core@karmaiq
+/plugin install karmaiq-impact@karmaiq
+
+# Architect (structural review)
+/plugin install karmaiq-core@karmaiq
+/plugin install karmaiq-architect@karmaiq
+
+# CI/CD (canary gate)
+/plugin install karmaiq-core@karmaiq
+/plugin install karmaiq-promotion-gate@karmaiq
+```
+
+After installing `karmaiq-core`, run `/karmaiq-core:setup` to pick your active CodeKarma domain (cached across sessions).
+
+---
+
+## Command cheatsheet
+
+| Command | Plugin | What |
+|---|---|---|
+| `/karmaiq-core:setup` | core | Pick active CodeKarma domain (one-time) |
+| `/karmaiq-core:overview` | core | Snapshot active domain — top services, top errors |
+| `/karmaiq-core:domain [name]` | core | Show or switch active domain |
+| `/karmaiq-firefighter:fire <api>` | firefighter | End-to-end RCA on a failing API |
+| `/karmaiq-firefighter:rca <id>` | firefighter | Upstream root-cause walk |
+| `/karmaiq-firefighter:errors` | firefighter | Top error-rate interfaces right now |
+| `/karmaiq-impact:method <svc> <method>` | impact | Blast radius of changing one method |
+| `/karmaiq-impact:service <svc>` | impact | What breaks if this service goes down |
+| `/karmaiq-impact:path <from> <to>` | impact | All paths between two services |
+| `/karmaiq-architect:cycles` | architect | Circular dependencies in the mesh |
+| `/karmaiq-architect:spof` | architect | Single points of failure |
+| `/karmaiq-architect:deadcode <svc>` | architect | Methods Nexus marked inactive |
+| `/karmaiq-architect:hot <svc>` | architect | Top CPU-consuming methods |
+| `/karmaiq-architect:fan [in\|out]` | architect | Most-depended-on / most-fanning-out |
+| `/karmaiq-promotion-gate:canary <svc>` | promotion-gate | Canary regression verdict |
+| `/karmaiq-promotion-gate:diff <a> <b>` | promotion-gate | Cross-entity regression diff |
+
+Many flows trigger automatically from natural-language prompts too — see [EXAMPLES.md](EXAMPLES.md) for the full journey.
+
+---
+
+## First steps after install
+
+See **[EXAMPLES.md](EXAMPLES.md)** for a guided user journey — copy-pasteable prompts with expected outputs, walking you through:
+
+- **5-minute first-boot tour** — pick domain, snapshot the mesh, test the pre-warm hook
+- **Journey 1 — SRE on-call**: incident lands at 2 AM, firefighter subagent runs end-to-end RCA
+- **Journey 2 — Dev refactor safety**: "is this method safe to delete?", pre-commit impact warnings
+- **Journey 3 — Architect quarterly review**: full-domain risk register via the architect subagent
+- **Journey 4 — CI/CD canary gating**: STABLE / WATCH / REGRESSION / INSUFFICIENT_DATA verdicts
+- **Crossover workflows** + a pattern cheat sheet
+
+---
+
+## Skip permission prompts for karmaIQ tools
+
+karmaIQ is read-only — every tool is safe to auto-allow. Skills already pre-approve karmaIQ tools while active. For a global allowlist (covers inline use outside any skill), add to `~/.claude/settings.json` or your project's `.claude/settings.json`:
 
 ```json
 {
-  "mcpServers": {
-    "karma-iq": {
-      "type": "http",
-      "url": "https://app.codekarma.tech/mcp/sse"
-    }
+  "permissions": {
+    "allow": [
+      "mcp__karma-iq__*"
+    ]
   }
 }
 ```
+
+See [karmaiq-core README](plugins/karmaiq-core/README.md#skip-permission-prompts-for-karmaiq-tools) for the full breakdown including plugin-shipped defaults.
+
+---
+
+## Bring-Your-Own-Cloud (BYOC) karmaIQ instance
+
+By default the plugins connect to the shared SaaS endpoint at `https://app.codekarma.tech/mcp` (streamable HTTP). If your organization runs a dedicated karmaIQ deployment on your own infrastructure, override the endpoint with the `KARMAIQ_MCP_URL` environment variable **before** launching Claude Code:
+
+```bash
+export KARMAIQ_MCP_URL=https://<your-byoc-domain>/mcp
+claude
+```
+
+Or persist for the project — drop into `.envrc` (direnv), shell rc, or CC `settings.json`:
+
+```json
+{
+  "env": {
+    "KARMAIQ_MCP_URL": "https://<your-byoc-domain>/mcp"
+  }
+}
+```
+
+The `karmaiq-core` plugin's `.mcp.json` reads `${KARMAIQ_MCP_URL:-https://app.codekarma.tech/mcp}` — env var wins if set, default otherwise. The `SessionStart` hook surfaces the active URL when it's a custom value so you can see which instance you're hitting.
+
+---
+
+## How it works
+
+Each plugin in this marketplace connects to the same remote karmaIQ MCP server (default: `https://app.codekarma.tech/mcp`, override per customer via `KARMAIQ_MCP_URL`) via streamable HTTP. The MCP server is hosted by CodeKarma; authentication is OAuth on first connect. The plugins themselves are configuration-only — they bundle:
+
+- **Skills** that activate when Claude encounters relevant tasks (e.g. "API X is failing" → firefighting workflow)
+- **Subagents** that run multi-step investigations in isolated context, returning focused summaries
+- **Hooks** that pre-warm service lookups or run impact checks at the right lifecycle moments
+- **Slash commands** for direct, deliberate invocation
+
+The MCP server auto-injects its full operating manual at handshake; the plugins layer persona-specific workflows on top.
+
+---
+
+## Other channels
+
+| Channel | How |
+|---|---|
+| **Cursor** | This repo also ships `.cursor-mcp.json` for direct Cursor configuration. See [Cursor section](#cursor) below. |
+| **Claude.ai / Desktop / Mobile** | karmaIQ is in the Anthropic Connectors Directory. Search "karmaIQ" or "CodeKarma" in Settings → Connectors. |
 
 ### Cursor
 
-You can install from the Cursor Marketplace or follow the steps below to manually configure:
-
-#### Via Marketplace
-
-1. Open Cursor and navigate to **Settings → MCP**
-2. Go to the [Cursor Marketplace](https://cursor.com/marketplace)
-3. Search for **karmaIQ**
-4. Click **Install**
-5. Authenticate via OAuth when prompted
-
-#### Manual Configuration
-
-##### Step 1: Open Cursor Settings
-
-Navigate to **Cursor → Settings → Cursor Settings** (or use the keyboard shortcut `Cmd+,` on macOS, `Ctrl+,` on Windows/Linux).
-
-##### Step 2: Navigate to MCP Tab
-
-In the Settings interface, click on the **MCP** tab to access MCP server configurations.
-
-##### Step 3: Add karmaIQ MCP Configuration
-
-Add the following configuration to connect to the remote karmaIQ MCP server:
+Open Cursor → Settings → MCP → add:
 
 ```json
 {
@@ -83,66 +179,40 @@ Add the following configuration to connect to the remote karmaIQ MCP server:
 }
 ```
 
-Save the configuration. You will see a connect button once added. Click that to authenticate into your CodeKarma account.
+OAuth on first use. The Cursor flow does not use the plugin/skill/hook layer — tools are exposed directly.
 
-### Anthropic Connectors Directory (Claude.ai, Claude Desktop)
+---
 
-The karmaIQ MCP server is available directly in Claude without any developer setup.
+## Local development (pre-publish testing)
 
-1. Open [Claude.ai](https://claude.ai) or Claude Desktop
-2. Go to **Settings → Connectors**
-3. Search for **karmaIQ** or **CodeKarma**
-4. Click **Connect**
-5. Authenticate via OAuth
-6. karmaIQ tools are now available in every Claude conversation
+Test plugins locally without going through the marketplace install path:
 
-> This channel requires no repo installation. It connects directly to the hosted MCP server and works across Claude.ai, Claude Desktop and Claude Code.
+```bash
+claude --plugin-dir ./plugins/karmaiq-core \
+       --plugin-dir ./plugins/karmaiq-firefighter \
+       --plugin-dir ./plugins/karmaiq-impact \
+       --plugin-dir ./plugins/karmaiq-architect \
+       --plugin-dir ./plugins/karmaiq-promotion-gate
+```
 
-## Available Tools
+Inside the session: run `/reload-plugins` after any edit; run `/mcp` to verify the karmaIQ MCP server is connected. If `--plugin-dir` loaded plugins don't auto-trigger OAuth, run `/plugins` once to enable them.
 
-The karmaIQ MCP server exposes the following tools:
+See [AGENTS.md](AGENTS.md) for contributor rules — skill authoring, subagent rules, hook conventions, no-secrets policy.
 
-| Tool | Description                                                                                                               |
-|------|---------------------------------------------------------------------------------------------------------------------------|
-| `get_system_overview` | Get a quick summary of your entire service mesh — how many services, how they connect, and which ones get the most traffic |
-| `search_catalog` | Search for any service, API, or method by name — with real time metrics                                                   |
-| `traverse_dependencies` | See what a service depends on or what depends on it , helps in determining the criticality and importance                 |
-| `find_path` | Find how two services are connected — through all unique flow it takes with metrics                                       |                                       |
-| `simulate_failure` | Answer "what breaks if this service goes down?" — see the full blast radius                                               |
-| `analyze_architecture` | Find structural problems like circular dependencies, single points of failure, or unused services                         |
-| `rank_interfaces` | See which APIs have the most traffic, highest errors, or worst latency                                                    |
-| `get_entity_metrics` | Get performance numbers (error rate, latency, throughput) for any service, API, or method                                 |
-| `get_api_deep_dive` | Get a full breakdown of a single API — who calls it, what it calls, where errors come from, and what's slow               |
-| `root_cause_candidates` | When something is failing, find the most likely cause                                                             |
-| `correlate_api_error` | Connect a failing API to the exact methods and code paths causing the issue                                               |
-| `map_api` | Find which code handles a specific HTTP endpoint (e.g., who handles `GET /api/orders`)                                    |
-| `explore_method_hierarchy` | See what a method calls and what calls it — the full call chain                                                           |
-| `analyze_flow` | Dig into a specific execution flow — find the hot path, bottlenecks, or where errors originate                            |
-| `analyze_codebase_methods` | Find the most expensive methods in a service — by CPU, latency, errors, or dead code                                      |
+---
 
-## Usage Examples
+## Requirements
 
-Once configured, you can interact with your service mesh through your AI assistant using natural language:
+- Active CodeKarma account with Karma Insights access
+- Claude Code v2.1+ installed (`claude --version`)
+- Your org admin must have granted you access to at least one domain
 
-- **Explore the mesh**: "Show me an overview of the service graph"
-- **Trace dependencies**: "What are the downstream dependencies of the orders service?"
-- **Assess blast radius**: "If the payments service goes down, what's the impact?"
-- **Investigate failures**: "What's causing the spike in errors on the checkout API?"
-- **Find critical paths**: "Show me the highest-latency path between the gateway and the database"
-- **Check service health**: "What are the error rates and p99 latency for the user service over the last hour?"
-- **Map code to APIs**: "Which controller handles GET /api/v1/orders in the orders service?"
-- **Analyze methods**: "What are the top CPU-consuming methods in the payments service?"
+## License
 
-## Notes & Limitations
+MIT — see [LICENSE](LICENSE).
 
-- **Remote server only**: This configuration connects to CodeKarma's hosted MCP server. No local installation is required or supported.
-- **Admin approval may be required**: Your organization's CodeKarma administrator must grant access to Karma Insights before you can use this plugin.
-
-## Documentation & Resources
+## Links
 
 - [CodeKarma](https://codekarma.ai)
-- [Plugin Repository](https://github.com/codekarma-tech/codekarma-mcp-plugin)
-
-## Questions or Issues?
-
-For questions about the karmaIQ MCP server or integration issues, please reach out to [info@codekarma.ai](mailto:info@codekarma.ai).
+- [Plugin repository](https://github.com/codekarma-tech/codekarma-mcp-plugin)
+- Contact: [info@codekarma.ai](mailto:info@codekarma.ai)

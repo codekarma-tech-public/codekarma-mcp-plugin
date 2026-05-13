@@ -1,0 +1,14 @@
+{
+  "name": "karmaiq-promotion-gate",
+  "description": "Canary regression verdict via karmaIQ regression_diff — STABLE / WATCH / REGRESSION / INSUFFICIENT_DATA. Manual invocation only (deliberate promotion decisions must never auto-fire). Compares canary vs stable replicasets or cross-service deltas. Requires karmaiq-core.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "homepage": "https://codekarma.ai",
+  "repository": "https://github.com/codekarma-tech/codekarma-mcp-plugin",
+  "license": "MIT",
+  "keywords": ["canary", "regression", "promotion-gate", "ci-cd", "deploy", "karmaiq", "mcp"]
+}

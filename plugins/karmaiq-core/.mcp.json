@@ -2,7 +2,7 @@
   "mcpServers": {
     "karma-iq": {
       "type": "http",
-      "url": "https://app.codekarma.tech/mcp/sse"
+      "url": "${KARMAIQ_MCP_URL:-https://app.codekarma.tech/mcp}"
     }
   }
 }

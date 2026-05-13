@@ -1,0 +1,14 @@
+{
+  "name": "karmaiq-architect",
+  "description": "Structural risk review across the karmaIQ service mesh — cycles, single points of failure, orphan services, dead code, hot CPU methods, fan-in/fan-out analysis. For architecture reviews, tech debt sprints, and pre-launch readiness checks. Requires karmaiq-core.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "homepage": "https://codekarma.ai",
+  "repository": "https://github.com/codekarma-tech/codekarma-mcp-plugin",
+  "license": "MIT",
+  "keywords": ["architecture", "cycles", "spof", "dead-code", "tech-debt", "fan-analysis", "karmaiq", "mcp"]
+}

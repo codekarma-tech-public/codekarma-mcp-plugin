@@ -1,0 +1,14 @@
+{
+  "name": "karmaiq-core",
+  "description": "Baseline karmaIQ MCP connection, active-domain picker, and the exploring-service-mesh skill. Install first — required by all other karmaIQ plugins.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "homepage": "https://codekarma.ai",
+  "repository": "https://github.com/codekarma-tech/codekarma-mcp-plugin",
+  "license": "MIT",
+  "keywords": ["mcp", "service-mesh", "observability", "karmaiq", "sre"]
+}

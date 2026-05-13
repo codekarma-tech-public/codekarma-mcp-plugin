@@ -1,0 +1,14 @@
+{
+  "name": "karmaiq-impact",
+  "description": "Pre-change blast-radius analysis via karmaIQ. Loads when you edit code or describe a refactor; on git commit, scans the staged diff for changed methods and warns when any have non-trivial production callers or amplification risk. Requires karmaiq-core.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "homepage": "https://codekarma.ai",
+  "repository": "https://github.com/codekarma-tech/codekarma-mcp-plugin",
+  "license": "MIT",
+  "keywords": ["impact", "blast-radius", "refactor", "pre-commit", "karmaiq", "mcp", "observability"]
+}

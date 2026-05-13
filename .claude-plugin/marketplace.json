@@ -1,0 +1,59 @@
+{
+  "name": "karmaiq",
+  "owner": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "metadata": {
+    "description": "Production intelligence SRE stack for Claude Code — bring real service-mesh truth into your IDE.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "karmaiq-core",
+      "source": "./plugins/karmaiq-core",
+      "description": "Baseline karmaIQ MCP connection, active-domain picker, and the exploring-service-mesh skill. Install first — required by all other karmaIQ plugins.",
+      "version": "1.0.0",
+      "category": "observability",
+      "keywords": ["mcp", "service-mesh", "observability", "karmaiq", "sre"],
+      "strict": true
+    },
+    {
+      "name": "karmaiq-firefighter",
+      "source": "./plugins/karmaiq-firefighter",
+      "description": "Autonomous SRE for production incident root-cause analysis via karmaIQ. Pre-warms service lookups when you mention APIs or services. Requires karmaiq-core.",
+      "version": "1.0.0",
+      "category": "observability",
+      "keywords": ["sre", "incident", "rca", "firefighting", "karmaiq"],
+      "strict": true
+    },
+    {
+      "name": "karmaiq-impact",
+      "source": "./plugins/karmaiq-impact",
+      "description": "Pre-change blast-radius analysis. Auto-loads in code files; on git commit, scans the staged diff and hints the impact of changed methods. Requires karmaiq-core.",
+      "version": "1.0.0",
+      "category": "observability",
+      "keywords": ["impact", "blast-radius", "refactor", "pre-commit", "karmaiq"],
+      "strict": true
+    },
+    {
+      "name": "karmaiq-architect",
+      "source": "./plugins/karmaiq-architect",
+      "description": "Structural risk review across the karmaIQ service mesh — cycles, single points of failure, orphan services, dead code, hot methods, fan analysis. Requires karmaiq-core.",
+      "version": "1.0.0",
+      "category": "observability",
+      "keywords": ["architecture", "cycles", "spof", "dead-code", "tech-debt", "karmaiq"],
+      "strict": true
+    },
+    {
+      "name": "karmaiq-promotion-gate",
+      "source": "./plugins/karmaiq-promotion-gate",
+      "description": "Canary regression verdict for promotion gates — STABLE / WATCH / REGRESSION / INSUFFICIENT_DATA. Manual invocation only. Requires karmaiq-core.",
+      "version": "1.0.0",
+      "category": "observability",
+      "keywords": ["canary", "regression", "promotion-gate", "ci-cd", "karmaiq"],
+      "strict": true
+    }
+  ]
+}

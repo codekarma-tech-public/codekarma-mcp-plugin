@@ -1,0 +1,14 @@
+{
+  "name": "karmaiq-firefighter",
+  "description": "Autonomous SRE for production incident root-cause analysis via karmaIQ. Diagnoses API errors, latency spikes, and alerts end-to-end. Pre-warms service lookups when you mention APIs or services in chat. Requires karmaiq-core.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CodeKarma",
+    "email": "info@codekarma.ai",
+    "url": "https://codekarma.ai"
+  },
+  "homepage": "https://codekarma.ai",
+  "repository": "https://github.com/codekarma-tech/codekarma-mcp-plugin",
+  "license": "MIT",
+  "keywords": ["sre", "incident", "rca", "firefighting", "karmaiq", "mcp", "observability"]
+}
