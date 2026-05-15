@@ -13,8 +13,8 @@
     {
       "name": "karmaiq-core",
       "source": "./plugins/karmaiq-core",
-      "description": "Baseline karmaIQ MCP connection, active-domain picker, and the exploring-service-mesh skill. Install first — required by all other karmaIQ plugins.",
-      "version": "1.0.0",
+      "description": "Baseline karmaIQ MCP connection, active-domain picker, exploring-service-mesh skill, and help/discoverability skill. Install first — required by all other karmaIQ plugins.",
+      "version": "1.0.1",
       "category": "observability",
       "keywords": ["mcp", "service-mesh", "observability", "karmaiq", "sre"],
       "strict": true

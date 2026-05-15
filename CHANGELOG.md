@@ -4,6 +4,23 @@ All notable changes to the karmaIQ plugin marketplace.
 
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Each plugin tracks its own semver in `plugins/<name>/.claude-plugin/plugin.json`; this file records marketplace-level releases.
 
+## [1.0.1] — 2026-05-14
+
+### Added — karmaiq-core only (version 1.0.1)
+- **`/karmaiq-core:help` skill** — discoverability aid. Lists installed plugins, every karmaIQ slash command grouped by plugin, common workflows, tips. Auto-loads when user asks "what can karmaIQ do", "karmaiq help", etc.
+- **`/karmaiq-core:setup` enhancement** — after picking the active domain, emits a verbatim copy-paste install block for the four other karmaIQ plugins (firefighter, impact, architect, promotion-gate). CC skills cannot programmatically invoke `/plugin install`; this is the one-shot copy-paste replacement.
+
+### Versions
+- `karmaiq-core` → 1.0.1
+- All other plugins → unchanged (1.0.0)
+
+### How existing users get this
+```
+/plugin update karmaiq-core@karmaiq
+```
+
+---
+
 ## [1.0.0] — 2026-05-14
 
 ### Added

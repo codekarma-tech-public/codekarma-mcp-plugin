@@ -21,9 +21,10 @@ On first session, you'll see: *"karmaIQ domain not set yet. Run /karmaiq-core:se
 
 | Command | Purpose |
 |---|---|
-| `/karmaiq-core:setup` | List available domains via `list_domains`, pick one, persist it |
+| `/karmaiq-core:setup` | List available domains via `list_domains`, pick one, persist it. Ends with copy-paste install block for other karmaIQ plugins. |
 | `/karmaiq-core:overview` | Snapshot of the active domain — nodes, edges, top services, top errors |
 | `/karmaiq-core:domain [name]` | Show current active domain, or switch by passing a name |
+| `/karmaiq-core:help` | Discoverability — lists all plugins, every karmaIQ slash command, common workflows |
 
 ## How the auto-skill activates
 

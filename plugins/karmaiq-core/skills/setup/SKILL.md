@@ -16,6 +16,22 @@ Setup flow for first install or domain switching.
 4. Ask: *"Which domain do you want active for this and future sessions?"*
 5. Once the user names a domain (by number or name), write the resolved domain name to `${CLAUDE_PLUGIN_DATA}/domain.txt`. Create the parent directory if it doesn't exist.
 6. Confirm: *"Active karmaIQ domain set to `<name>`. All karmaIQ tools will now query this domain. Switch later with `/karmaiq-core:domain <other-name>`."*
+7. Emit the **install-the-rest block verbatim** as a final step. The user copies and runs each line to complete the karmaIQ install. Render exactly:
+
+   ````
+   Install the rest of karmaIQ:
+
+   ```
+   /plugin install karmaiq-firefighter@karmaiq
+   /plugin install karmaiq-impact@karmaiq
+   /plugin install karmaiq-architect@karmaiq
+   /plugin install karmaiq-promotion-gate@karmaiq
+   ```
+
+   Or pick by persona — see README.md.
+   ````
+
+   Reasoning: Claude Code skills cannot programmatically invoke `/plugin install` (not in the Skill-tool whitelist), so we hand the user a one-shot copy-paste block.
 
 ## Error handling
 
